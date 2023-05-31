@@ -7,7 +7,7 @@ export class AuthService {
   constructor(
     private readonly usersService: UsersService,
     private readonly jwtService: JwtService,
-  ) {}
+  ) { }
 
   async signIn(username: string, pass: string) {
     const user = await this.usersService.findOne(username);
@@ -15,7 +15,7 @@ export class AuthService {
       throw new UnauthorizedException();
     }
 
-    const payload = { sub: user.userId, username: user.username };
+    const payload = { id: user.userId, username: user.username, age: "20" };
 
     // TODO: return JWT key here
 
