@@ -10,12 +10,13 @@ import { User } from './users/entities/user.entity';
   imports: [AuthModule, UsersModule, TypeOrmModule.forRoot({
     type: "mssql",
     host: "localhost",
-    port: 3306,
+    port: 1433,
     username: "sa",
-    password: "sa",
-    database: "test",
-    entities: [User],
-    synchronize: true
+    password: "Tuanlinh12@",
+    database: "TestDB",
+    extra: {
+      trustServerCertificate: true,
+    }
   })],
   controllers: [AppController],
   providers: [AppService],
