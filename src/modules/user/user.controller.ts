@@ -33,4 +33,10 @@ export class UserController {
         const dataReturn = this.userService.getInfoUser(request.user);
         return dataReturn;
     }
+
+    @Get("create-admin")
+    async createAdmin() {
+        const dataReturn = this.userService.createAdmin();
+        return dataReturn;
+    }
 }

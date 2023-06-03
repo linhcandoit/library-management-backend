@@ -10,12 +10,12 @@ export class UserService {
   constructor(@InjectRepository(User) private readonly userRepository: Repository<User>) { }
 
   async createUser(user: User, data: CreateUserDto) {
-    if(user.role !== ROLE.admin){
+    if (user.role !== ROLE.admin) {
       throw new HttpException("Don't have permission", HttpStatus.BAD_REQUEST);
     }
 
     const newUser = new User();
-    
+
     newUser.id = data.id;
     newUser.name = data.name;
     newUser.email = data.email;
@@ -44,13 +44,29 @@ export class UserService {
     return user;
   }
 
-  async getListUser(){
+  async getListUser() {
     const users = await this.userRepository.find();
     return users;
   }
 
-  async getInfoUser(user: User){
+  async getInfoUser(user: User) {
     return user;
   }
-  
+
+  async createAdmin() {
+    const user = new User();
+
+    user.id = "2002";
+    user.username = "2002";
+    user.password = "2002";
+    user.faculty = "CNTT&TT";
+    user.class = "IT";
+    user.role = "admin";
+    user.email = "admin@sis.hust.edu.vn";
+    user.name = "IamADMIN";
+
+    await this.userRepository.save(user);
+    return user;
+  }
+
 }
