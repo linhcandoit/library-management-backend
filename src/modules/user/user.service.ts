@@ -3,13 +3,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/database/entities/user.entity';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
+import { ROLE } from 'src/shared/constant';
 
 @Injectable()
-export class UsersService {
+export class UserService {
   constructor(@InjectRepository(User) private readonly userRepository: Repository<User>) { }
 
   async createUser(user: User, data: CreateUserDto) {
-    if(user.role !== "admin"){
+    if(user.role !== ROLE.admin){
       throw new HttpException("Don't have permission", HttpStatus.BAD_REQUEST);
     }
 
