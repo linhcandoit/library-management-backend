@@ -4,7 +4,7 @@ import { AuthGuard } from "../auth/auth.guard";
 import { CreateBookDto } from "./dto/create-book.dto";
 import { BookService } from "./book.service";
 import { UpdateBookDto } from "./dto/update-book.dto";
-import { FileInterceptor } from "@nestjs/platform-express";
+import { FileFieldsInterceptor, FileInterceptor } from "@nestjs/platform-express";
 import multer = require("multer");
 
 @ApiTags("book")
@@ -15,15 +15,22 @@ export class BookController {
     @UseGuards(AuthGuard)
     @ApiBearerAuth()
     @Post("create-book")
-    @UseInterceptors(FileInterceptor("book", {
+    @UseInterceptors(FileFieldsInterceptor([
+        { name: "book", maxCount: 1 },
+        { name: "image", maxCount: 1 }
+    ], {
         storage: multer.diskStorage({
             destination: function (req, file, cb) {
-                cb(null, "./public/book");
+                if (file.fieldname === "book") {
+                    cb(null, "./public/book");
+                } else if (file.fieldname === "image") {
+                    cb(null, "./public/image");
+                }
             },
             filename: function (req, file, cb) {
                 const parts = file.originalname.split(".");
-                const now = Date.now();
                 let name: string = "";
+                const now = Date.now();
                 if (parts.length === 1) {
                     name = now + ".pdf";
                 } else {
@@ -32,19 +39,8 @@ export class BookController {
                 cb(null, name);
             }
         })
-    }))
-    @UseInterceptors(FileInterceptor("image", {
-        storage: multer.diskStorage({
-            destination: function (req, file, cb) {
-                cb(null, "./public/image")
-            },
-            filename: function (req, file, cb) {
-                const parts = file.originalname.split(".");
-                const now = Date.now();
-                cb(null, now + "." + parts[parts.length - 1]);
-            }
-        })
-    }))
+    }
+    ))
     @ApiConsumes("multipart/form-data")
     @ApiBody({
         type: CreateBookDto
