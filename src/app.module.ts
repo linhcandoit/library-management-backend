@@ -5,6 +5,8 @@ import { User } from './database/entities/user.entity';
 import { UserModule } from './modules/user/user.module';
 import { Book } from './database/entities/book.entity';
 import { BookModule } from './modules/book/book.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
   imports: [AuthModule, UserModule, BookModule, TypeOrmModule.forRoot({
@@ -19,6 +21,9 @@ import { BookModule } from './modules/book/book.module';
     extra: {
       trustServerCertificate: true,
     }
-  })],
+  }),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, "..", "public")
+    })],
 })
 export class AppModule { }

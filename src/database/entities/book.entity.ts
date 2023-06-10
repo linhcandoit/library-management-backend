@@ -19,4 +19,10 @@ export class Book {
 
     @Column()
     public position: string;
+
+    @Column()
+    public bookLink: string;
+
+    @Column()
+    public imageLink: string;
 }

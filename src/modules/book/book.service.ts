@@ -11,7 +11,7 @@ import { UpdateBookDto } from "./dto/update-book.dto";
 export class BookService {
     constructor(@InjectRepository(Book) private readonly bookRepository: Repository<Book>) { }
 
-    async createBook(user: User, data: CreateBookDto) {
+    async createBook(user: User, files: { book?: Express.Multer.File, image?: Express.Multer.File }, data: CreateBookDto) {
         if (user.role !== ROLE.admin) {
             throw new HttpException("Don't have permission", HttpStatus.BAD_REQUEST);
         }
@@ -22,6 +22,8 @@ export class BookService {
         book.type = data.type;
         book.position = data.position;
         book.remaining = data.reamining;
+        book.bookLink = files.book[0].filename;
+        book.imageLink = files.image[0].filename;
 
         await this.bookRepository.save(book);
 

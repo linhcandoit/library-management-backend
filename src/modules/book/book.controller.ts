@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Put, Req, UseGuards, UseInterceptors } from "@nestjs/common";
+import { Body, Controller, Post, Put, Req, UploadedFiles, UseGuards, UseInterceptors } from "@nestjs/common";
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from "@nestjs/swagger";
 import { AuthGuard } from "../auth/auth.guard";
 import { CreateBookDto } from "./dto/create-book.dto";
@@ -45,8 +45,8 @@ export class BookController {
     @ApiBody({
         type: CreateBookDto
     })
-    async createBook(@Req() request, @Body() data: CreateBookDto) {
-        const dataReturn = this.bookService.createBook(request.user, data);
+    async createBook(@Req() request, @UploadedFiles() files: { book?: Express.Multer.File, image?: Express.Multer.File }, @Body() data: CreateBookDto) {
+        const dataReturn = this.bookService.createBook(request.user, files, data);
         return dataReturn;
     }
 
