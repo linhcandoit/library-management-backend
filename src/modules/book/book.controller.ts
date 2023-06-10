@@ -4,7 +4,7 @@ import { AuthGuard } from "../auth/auth.guard";
 import { CreateBookDto } from "./dto/create-book.dto";
 import { BookService } from "./book.service";
 import { UpdateBookDto } from "./dto/update-book.dto";
-import { FileFieldsInterceptor, FileInterceptor } from "@nestjs/platform-express";
+import { FileFieldsInterceptor } from "@nestjs/platform-express";
 import multer = require("multer");
 
 @ApiTags("book")
