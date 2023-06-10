@@ -2,7 +2,7 @@ import { ApiProperty } from "@nestjs/swagger";
 
 export class CreateBookDto {
     @ApiProperty({
-        type:"string"
+        type: "string"
     })
     name: string;
 
@@ -25,4 +25,16 @@ export class CreateBookDto {
         type: "number"
     })
     reamining: number;
+
+    @ApiProperty({
+        type: "string",
+        format: "binary"
+    })
+    book: any;
+
+    @ApiProperty({
+        type: "string",
+        format: "binary"
+    })
+    image: any;
 }
