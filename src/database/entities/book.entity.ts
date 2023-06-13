@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Borrowing } from "./borrowing.entity";
 
 @Entity()
 export class Book {
@@ -25,4 +26,7 @@ export class Book {
 
     @Column()
     public imageLink: string;
+
+    @OneToMany(() => Borrowing, (borrowing) => borrowing.book)
+    public borrowings: Borrowing[];
 }

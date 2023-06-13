@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Borrowing } from "./borrowing.entity";
 
 @Entity()
 export class User {
@@ -12,7 +13,7 @@ export class User {
     public password: string;
 
     @Column()
-    public role : string;
+    public role: string;
 
     @Column()
     public bookBorrowed: number;
@@ -28,4 +29,7 @@ export class User {
 
     @Column()
     public class: string;
+
+    @OneToMany(() => Borrowing, (borrowing) => borrowing.user)
+    public borrowings: Borrowing[];
 }

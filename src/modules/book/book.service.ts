@@ -53,21 +53,23 @@ export class BookService {
         return book;
     }
 
-    async getListBook(){
+    async getListBook() {
         const book = await this.bookRepository.find({});
         return book;
     }
 
-    async deleteBook(user: User, data: DeleteBookDto){
-        if(user.role !== ROLE.admin){
+    async deleteBook(user: User, data: DeleteBookDto) {
+        if (user.role !== ROLE.admin) {
             throw new HttpException("Don't have permissions", HttpStatus.BAD_REQUEST);
         }
 
-        const book = await this.bookRepository.findOne({where: {
-            id: data.id
-        }});
+        const book = await this.bookRepository.findOne({
+            where: {
+                id: data.id
+            }
+        });
 
-        if(!book){
+        if (!book) {
             throw new HttpException("Invalid book's ID", HttpStatus.BAD_REQUEST);
         }
 

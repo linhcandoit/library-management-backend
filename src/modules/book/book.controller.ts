@@ -68,7 +68,7 @@ export class BookController {
     @Delete("delete-book")
     @UseGuards(AuthGuard)
     @ApiBearerAuth()
-    async deleteBook(@Req() request, @Body() data: DeleteBookDto){
+    async deleteBook(@Req() request, @Body() data: DeleteBookDto) {
         const dataReturn = this.bookService.deleteBook(request.user, data);
         return dataReturn;
     }

@@ -70,16 +70,18 @@ export class UserService {
     return user;
   }
 
-  async deleteUser(user: User, data: DeleteUserDto){
-    if(user.role !== ROLE.admin){
+  async deleteUser(user: User, data: DeleteUserDto) {
+    if (user.role !== ROLE.admin) {
       throw new HttpException("Don't have permissions", HttpStatus.BAD_REQUEST);
     }
 
-    const usrDelete = await this.userRepository.findOne({where: {
-      id: data.id
-    }});
+    const usrDelete = await this.userRepository.findOne({
+      where: {
+        id: data.id
+      }
+    });
 
-    if(!usrDelete){
+    if (!usrDelete) {
       throw new HttpException("Invalid user's ID", HttpStatus.BAD_REQUEST);
     }
 

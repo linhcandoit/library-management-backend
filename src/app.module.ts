@@ -7,16 +7,18 @@ import { Book } from './database/entities/book.entity';
 import { BookModule } from './modules/book/book.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { Borrowing } from './database/entities/borrowing.entity';
+import { BorrowingModule } from './modules/borrowing/borrowing.module';
 
 @Module({
-  imports: [AuthModule, UserModule, BookModule, TypeOrmModule.forRoot({
+  imports: [AuthModule, UserModule, BookModule, BorrowingModule, TypeOrmModule.forRoot({
     type: "mssql",
     host: "localhost",
     port: 1433,
     username: "sa",
     password: "Tuanlinh12@",
     database: "libraryDB",
-    entities: [User, Book],
+    entities: [User, Book, Borrowing],
     synchronize: true,
     extra: {
       trustServerCertificate: true,

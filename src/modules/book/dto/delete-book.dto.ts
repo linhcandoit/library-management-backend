@@ -5,5 +5,5 @@ export class DeleteBookDto {
         type: "string",
         description: "ID of the book you want to delete"
     })
-    id : string;
+    id: string;
 }

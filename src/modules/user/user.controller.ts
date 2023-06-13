@@ -3,7 +3,6 @@ import { UserService } from "./user.service";
 import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { AuthGuard } from "../auth/auth.guard";
 import { CreateUserDto } from "./dto/create-user.dto";
-import { Request } from "express";
 import { DeleteUserDto } from "./dto/delete-user.dto";
 
 @ApiTags("user")
@@ -44,8 +43,8 @@ export class UserController {
     @Delete("delete-user")
     @UseGuards(AuthGuard)
     @ApiBearerAuth()
-    async deleteUser(@Req() request, @Body() data: DeleteUserDto){
-        const dataReturn = this.userService.deleteUser(request.user,data);
+    async deleteUser(@Req() request, @Body() data: DeleteUserDto) {
+        const dataReturn = this.userService.deleteUser(request.user, data);
         return dataReturn;
     }
 }
