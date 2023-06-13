@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Put, Req, UploadedFiles, UseGuards, UseInterceptors } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Post, Put, Req, UploadedFiles, UseGuards, UseInterceptors } from "@nestjs/common";
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from "@nestjs/swagger";
 import { AuthGuard } from "../auth/auth.guard";
 import { CreateBookDto } from "./dto/create-book.dto";
@@ -6,6 +6,7 @@ import { BookService } from "./book.service";
 import { UpdateBookDto } from "./dto/update-book.dto";
 import { FileFieldsInterceptor } from "@nestjs/platform-express";
 import multer = require("multer");
+import { DeleteBookDto } from "./dto/delete-book.dto";
 
 @ApiTags("book")
 @Controller("book")
@@ -53,6 +54,22 @@ export class BookController {
     @Put("update-book")
     async updateBook(@Req() request, @Body() data: UpdateBookDto) {
         const dataReturn = this.bookService.updateBook(request.user, data);
+        return dataReturn;
+    }
+
+    @Get("list-book")
+    @UseGuards(AuthGuard)
+    @ApiBearerAuth()
+    async getListBook() {
+        const dataReturn = this.bookService.getListBook();
+        return dataReturn;
+    }
+
+    @Delete("delete-book")
+    @UseGuards(AuthGuard)
+    @ApiBearerAuth()
+    async deleteBook(@Req() request, @Body() data: DeleteBookDto){
+        const dataReturn = this.bookService.deleteBook(request.user, data);
         return dataReturn;
     }
 

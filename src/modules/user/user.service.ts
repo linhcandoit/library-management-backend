@@ -4,6 +4,7 @@ import { User } from 'src/database/entities/user.entity';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { ROLE } from 'src/shared/constant';
+import { DeleteUserDto } from './dto/delete-user.dto';
 
 @Injectable()
 export class UserService {
@@ -67,6 +68,24 @@ export class UserService {
 
     await this.userRepository.save(user);
     return user;
+  }
+
+  async deleteUser(user: User, data: DeleteUserDto){
+    if(user.role !== ROLE.admin){
+      throw new HttpException("Don't have permissions", HttpStatus.BAD_REQUEST);
+    }
+
+    const usrDelete = await this.userRepository.findOne({where: {
+      id: data.id
+    }});
+
+    if(!usrDelete){
+      throw new HttpException("Invalid user's ID", HttpStatus.BAD_REQUEST);
+    }
+
+    await this.userRepository.remove(usrDelete);
+
+    return usrDelete;
   }
 
 }
