@@ -32,6 +32,7 @@ export class BookService {
     }
 
     async updateBook(user: User, data: UpdateBookDto) {
+        console.log(user)
         if (user.role !== ROLE.admin) {
             throw new HttpException("Don't have permission", HttpStatus.BAD_REQUEST);
         }

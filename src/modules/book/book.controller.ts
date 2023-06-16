@@ -52,6 +52,8 @@ export class BookController {
     }
 
     @Put("update-book")
+    @UseGuards(AuthGuard)
+    @ApiBearerAuth()
     async updateBook(@Req() request, @Body() data: UpdateBookDto) {
         const dataReturn = this.bookService.updateBook(request.user, data);
         return dataReturn;
