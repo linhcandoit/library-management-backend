@@ -71,6 +71,8 @@ export class UserService {
   }
 
   async deleteUser(user: User, data: DeleteUserDto) {
+
+    // comment
     if (user.role !== ROLE.admin) {
       throw new HttpException("Don't have permissions", HttpStatus.BAD_REQUEST);
     }
