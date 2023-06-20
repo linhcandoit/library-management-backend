@@ -5,7 +5,6 @@ import { Borrowing } from "src/database/entities/borrowing.entity";
 import { User } from "src/database/entities/user.entity";
 import { Repository } from "typeorm";
 import { A_MONTH_TIME, ROLE } from "src/shared/constant";
-import moment from "moment";
 import { BorrowBookDto } from "./dto/borrow-book.dto";
 
 @Injectable()
@@ -27,6 +26,10 @@ export class BorrowingService {
             }
         });
 
+        if (student.bookBorrowed === 0) {
+            throw new HttpException("Can not bororw book", HttpStatus.BAD_REQUEST);
+        }
+
         const book = await this.bookRepository.findOne({
             where: {
                 id: data.bookId
@@ -42,7 +45,7 @@ export class BorrowingService {
 
         await this.borrowingRepository.save(borrowing);
 
-        student.bookBorrowed --;
+        student.bookBorrowed--;
 
         await this.userRepository.save(student);
 
