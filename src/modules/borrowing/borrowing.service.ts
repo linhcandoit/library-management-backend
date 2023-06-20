@@ -42,6 +42,10 @@ export class BorrowingService {
 
         await this.borrowingRepository.save(borrowing);
 
+        student.bookBorrowed --;
+
+        await this.userRepository.save(student);
+
         return borrowing;
     }
 
