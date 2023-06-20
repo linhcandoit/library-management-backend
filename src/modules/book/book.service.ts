@@ -53,7 +53,7 @@ export class BookService {
         return book;
     }
 
-    async getListBook() {
+    async getListBook(user: User, searchedText: string) {
         const book = await this.bookRepository.find({});
         return book;
     }
@@ -77,5 +77,4 @@ export class BookService {
 
         return book;
     }
-
 }

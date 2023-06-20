@@ -1,5 +1,5 @@
-import { Body, Controller, Delete, Get, Post, Put, Req, UploadedFiles, UseGuards, UseInterceptors } from "@nestjs/common";
-import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from "@nestjs/swagger";
+import { Body, Controller, Delete, Get, Post, Put, Query, Req, UploadedFiles, UseGuards, UseInterceptors } from "@nestjs/common";
+import { ApiBearerAuth, ApiBody, ApiConsumes, ApiQuery, ApiTags } from "@nestjs/swagger";
 import { AuthGuard } from "../auth/auth.guard";
 import { CreateBookDto } from "./dto/create-book.dto";
 import { BookService } from "./book.service";
@@ -62,8 +62,16 @@ export class BookController {
     @Get("list-book")
     @UseGuards(AuthGuard)
     @ApiBearerAuth()
-    async getListBook() {
-        const dataReturn = this.bookService.getListBook();
+    @ApiQuery({
+        name: "searchedText",
+        type: "string",
+        required: false
+    })
+    async getListBook(
+        @Req() request,
+        @Query("searchedText") searchedText: string = null
+    ) {
+        const dataReturn = this.bookService.getListBook(request.user, searchedText);
         return dataReturn;
     }
 
@@ -74,5 +82,4 @@ export class BookController {
         const dataReturn = this.bookService.deleteBook(request.user, data);
         return dataReturn;
     }
-
 }

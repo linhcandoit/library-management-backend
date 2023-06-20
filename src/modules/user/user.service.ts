@@ -65,6 +65,7 @@ export class UserService {
     user.role = "admin";
     user.email = "admin@sis.hust.edu.vn";
     user.name = "IamADMIN";
+    user.bookBorrowed = 10;
 
     await this.userRepository.save(user);
     return user;
