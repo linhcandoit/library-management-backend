@@ -53,20 +53,22 @@ export class BorrowingService {
     }
 
     async getListBorrowing(user: User) {
-        let condition = {};
+        let borrowings: Borrowing[];
 
-        if (user.role === ROLE.user) {
-            condition["userId"] = user.id;
-        }
-
-        let borrowings = null;
-
-        if (Object.keys(condition).length === 0) {
-            borrowings = await this.borrowingRepository.find();
+        if (user.role === ROLE.admin) {
+            // get all the borrowing information
+            borrowings = await this.borrowingRepository
+                .createQueryBuilder("borrowing")
+                .innerJoinAndSelect("borrowing.user", "user")
+                .innerJoinAndSelect("borrowing.book", "book")
+                .getMany();
         } else {
-            borrowings = await this.borrowingRepository.find({
-                where: condition
-            });
+            borrowings = await this.borrowingRepository
+                .createQueryBuilder("borrowing")
+                .innerJoinAndSelect("borrowing.user", "user")
+                .innerJoinAndSelect("borrowing.book", "book")
+                .where("borrowing.user = :userId", { userId: user.id })
+                .getMany();
         }
         return borrowings;
     }
