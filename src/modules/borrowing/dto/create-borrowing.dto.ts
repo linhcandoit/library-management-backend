@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 
-export class BorrowBookDto {
+export class CreateBorrowingDto {
     @ApiProperty({
         type: "string",
         description: "User's ID"

@@ -4,8 +4,12 @@ import { Book } from "src/database/entities/book.entity";
 import { Borrowing } from "src/database/entities/borrowing.entity";
 import { User } from "src/database/entities/user.entity";
 import { Repository } from "typeorm";
-import { A_MONTH_TIME, ROLE } from "src/shared/constant";
-import { BorrowBookDto } from "./dto/borrow-book.dto";
+import { ROLE } from "src/shared/constant";
+import { UpdateBorrowingDto } from "./dto/update-borrowing.dto";
+import { CreateBorrowingDto } from "./dto/create-borrowing.dto";
+import { DeleteBorrowingDto } from "./dto/delete-borrowing.dto";
+
+const moment = require("moment")
 
 @Injectable()
 export class BorrowingService {
@@ -15,7 +19,7 @@ export class BorrowingService {
         @InjectRepository(Book) private readonly bookRepository: Repository<Book>
     ) { }
 
-    async borrowBook(user: User, data: BorrowBookDto) {
+    async createBorrowing(user: User, data: CreateBorrowingDto) {
         if (user.role !== ROLE.admin) {
             throw new HttpException("Don't have permissions", HttpStatus.BAD_REQUEST);
         }
@@ -40,8 +44,8 @@ export class BorrowingService {
 
         borrowing.user = student;
         borrowing.book = book;
-        borrowing.dateBorrowed = new Date(Date.now());
-        borrowing.dateExpired = new Date(Date.now() + 3 * A_MONTH_TIME);
+        borrowing.dateBorrowed = moment().format("DD-MM-YYYY");
+        borrowing.dateExpired = moment().add(3, "M").format("DD-MM-YYYY");
 
         await this.borrowingRepository.save(borrowing);
 
@@ -72,4 +76,46 @@ export class BorrowingService {
         }
         return borrowings;
     }
+
+    async updateBorrowing(user: User, data: UpdateBorrowingDto) {
+        let borrowing: Borrowing;
+        try {
+            borrowing = await this.borrowingRepository.findOne({
+                where: {
+                    id: data.id
+                }
+            });
+        } catch (error) {
+            throw new HttpException("Invalid borrowing's ID", HttpStatus.BAD_REQUEST);
+        }
+
+        borrowing.dateBorrowed = moment().format("DD-MM-YYYY");
+        borrowing.dateExpired = moment().add(3, "M").format("DD-MM-YYYY");
+
+        await this.borrowingRepository.save(borrowing);
+
+        return borrowing;
+    }
+
+    async deleteBorrowing(user: User, data: DeleteBorrowingDto) {
+        if (user.role !== ROLE.admin) {
+            throw new HttpException("Don't have permissions", HttpStatus.BAD_REQUEST);
+        }
+
+        let borrowing: Borrowing;
+        try {
+            borrowing = await this.borrowingRepository.findOne({
+                where: {
+                    id: data.id
+                }
+            });
+        } catch (error) {
+            throw new HttpException("Invalid borrowing's ID", HttpStatus.BAD_REQUEST);
+        }
+
+        await this.borrowingRepository.remove(borrowing);
+
+        return "successful";
+    }
+
 }

@@ -8,10 +8,10 @@ export class Borrowing {
     public id: string;
 
     @Column()
-    public dateBorrowed: Date;
+    public dateBorrowed: string;
 
     @Column()
-    public dateExpired: Date;
+    public dateExpired: string;
 
     @ManyToOne(() => User, (user) => user.borrowings)
     public user: User;
