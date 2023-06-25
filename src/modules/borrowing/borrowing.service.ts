@@ -103,16 +103,26 @@ export class BorrowingService {
         }
 
         let borrowing: Borrowing;
+
         try {
-            borrowing = await this.borrowingRepository.findOne({
-                where: {
-                    id: data.id
-                }
-            });
+            borrowing = await this.borrowingRepository
+                .createQueryBuilder("borrowing")
+                .innerJoinAndSelect("borrowing.user", "user")
+                .where("borrowing.id = :borrowingId", { borrowingId: data.id })
+                .getOne();
         } catch (error) {
             throw new HttpException("Invalid borrowing's ID", HttpStatus.BAD_REQUEST);
         }
 
+        const student = await this.userRepository.findOne({
+            where: {
+                id: borrowing.user.id
+            }
+        });
+
+        student.bookBorrowed++;
+
+        await this.userRepository.save(student);
         await this.borrowingRepository.remove(borrowing);
 
         return "successful";
