@@ -13,6 +13,14 @@ export class Borrowing {
     @Column()
     public dateExpired: string;
 
+    @Column({
+        nullable : true
+    })
+    public dateReturned: string;
+
+    @Column()
+    public status: string; // enum BORROWING_STATUS
+
     @ManyToOne(() => User, (user) => user.borrowings)
     public user: User;
 

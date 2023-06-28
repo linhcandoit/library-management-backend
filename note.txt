@@ -9,3 +9,5 @@ localhost:3000/image/...
 
 borrowing api: cac api lien quan den tinh nang muon sach
     create, update, delete, getlist: cai ten noi len tat ca nhe Long
+
+borrowing co 3 status: borrowed, expired va return (duoc mo ta trong file constant.ts)

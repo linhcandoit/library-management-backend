@@ -4,7 +4,7 @@ import { Book } from "src/database/entities/book.entity";
 import { Borrowing } from "src/database/entities/borrowing.entity";
 import { User } from "src/database/entities/user.entity";
 import { Repository } from "typeorm";
-import { ROLE } from "src/shared/constant";
+import { BORROWING_STATUS, ROLE } from "src/shared/constant";
 import { UpdateBorrowingDto } from "./dto/update-borrowing.dto";
 import { CreateBorrowingDto } from "./dto/create-borrowing.dto";
 import { DeleteBorrowingDto } from "./dto/delete-borrowing.dto";
@@ -46,6 +46,7 @@ export class BorrowingService {
         borrowing.book = book;
         borrowing.dateBorrowed = moment().format("DD-MM-YYYY");
         borrowing.dateExpired = moment().add(3, "M").format("DD-MM-YYYY");
+        borrowing.status = BORROWING_STATUS.borrowed;
 
         await this.borrowingRepository.save(borrowing);
 
@@ -123,7 +124,11 @@ export class BorrowingService {
         student.bookBorrowed++;
 
         await this.userRepository.save(student);
-        await this.borrowingRepository.remove(borrowing);
+
+        borrowing.status = BORROWING_STATUS.returned;
+        borrowing.dateReturned = moment().format("YYYY-MM-DD");
+
+        await this.borrowingRepository.save(borrowing);
 
         return "successful";
     }
